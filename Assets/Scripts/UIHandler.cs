@@ -209,7 +209,7 @@ public class UIHandler : MonoBehaviour
 
     public void AuthenticateScore()
     {
-        AddQuestion(questionInputField.text, Magic8Ball.MagicEightBall());
+        AddQuestion(questionInputField.text, MagicAnswer.AskAQuestion());
     }
 
     public void GoOfflineButton()
