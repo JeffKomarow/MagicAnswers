@@ -10,23 +10,22 @@ using UnityEngine;
 public class UIHandler : MonoBehaviour
 {
 
-    ArrayList leaderBoard = new ArrayList();
+    ArrayList questions = new ArrayList();
 
     private const int _maxScores = 15;
-    private string _email = "";
-    private int _score = 100;
     private DateTime _dateTime;
     private string _question;
     private string _answer;
+    private string _user;
+
+    private bool canAsk = true;
 
     const int kMaxLogSize = 16382;
     DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
     protected bool isFirebaseInitialized = false;
 
     // adding in variables
-    public TMP_Text logTextUI;
-    public TMP_Text emailUI;
-    public TMP_Text scoreUI;
+    public TMP_Text TextUI;
 
     public TMP_InputField questionInputField;
 
@@ -38,8 +37,10 @@ public class UIHandler : MonoBehaviour
     // At start, check for the required dependencies to use Firebase, and if not, add them if possible.
     protected virtual void Start()
     {
-        leaderBoard.Clear();
-        leaderBoard.Add("Firebase Top " + _maxScores.ToString() + " Scores");
+        canAsk = true;
+        questions.Clear();
+        questions.Add("Firebase Top " + _maxScores.ToString() + " Scores");
+
 
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
@@ -64,13 +65,15 @@ public class UIHandler : MonoBehaviour
         StartListener();
         isFirebaseInitialized = true;
         Debug.Log("Firebase Initialized");
-        logTextUI.text = "Firebase Initialized";
+        _user = SystemInfo.deviceUniqueIdentifier.ToString();
+        _user = _user.Substring(Math.Max(0, _user.Length - 6));
+        TextUI.text = "The underworld is ready for your question " + _user + ".";
     }
 
     protected void StartListener()
     {
         FirebaseDatabase.DefaultInstance
-          .GetReference("Leaders").OrderByChild("score")
+          .GetReference("Questions").OrderByChild("date")
           .ValueChanged += (object sender2, ValueChangedEventArgs e2) =>
           {
               if (e2.DatabaseError != null)
@@ -78,10 +81,10 @@ public class UIHandler : MonoBehaviour
                   Debug.Log(e2.DatabaseError.Message);
                   return;
               }
-              Debug.Log("Received values for Leaders.");
-              string title = leaderBoard[0].ToString();
-              leaderBoard.Clear();
-              leaderBoard.Add(title);
+              Debug.Log("Received questions from the list.");
+              string title = questions[0].ToString();
+              questions.Clear();
+              questions.Add(title);
               if (e2.Snapshot != null && e2.Snapshot.ChildrenCount > 0)
               {
                   foreach (var childSnapshot in e2.Snapshot.Children)
@@ -93,10 +96,10 @@ public class UIHandler : MonoBehaviour
                       }
                       else
                       {
-                    //      Debug.Log("Leaders entry : " +
-                    //childSnapshot.Child("question").Value.ToString() + " - " +
-                    //childSnapshot.Child("answer").Value.ToString());
-                          leaderBoard.Insert(1, childSnapshot.Child("question").ToString() + "  " + childSnapshot.Child("answer").ToString());
+                          //      Debug.Log("Leaders entry : " +
+                          //childSnapshot.Child("question").Value.ToString() + " - " +
+                          //childSnapshot.Child("answer").Value.ToString());
+                          questions.Insert(1, childSnapshot.Child("question").ToString() + "  " + childSnapshot.Child("answer").ToString());
 
                           GameObject tempGo = Instantiate(rowPreFab, leaderBoardArea);
                           TMP_Text[] texts = tempGo.GetComponentsInChildren<TMP_Text>();
@@ -122,13 +125,13 @@ public class UIHandler : MonoBehaviour
     // A realtime database transaction receives MutableData which can be modified
     // and returns a TransactionResult which is either TransactionResult.Success(data) with
     // modified data or TransactionResult.Abort() which stops the transaction with no changes.
-    TransactionResult AddScoreTransaction(MutableData mutableData)
+    TransactionResult AddQuestion(MutableData mutableData)
     {
-        List<object> leaders = mutableData.Value as List<object>;
+        List<object> Answers = mutableData.Value as List<object>;
 
-        if (leaders == null)
+        if (Answers == null)
         {
-            leaders = new List<object>();
+            Answers = new List<object>();
         }
         //else if (mutableData.ChildrenCount >= _maxScores)
         //{
@@ -157,34 +160,42 @@ public class UIHandler : MonoBehaviour
         //}
 
         // Now we add the new score as a new entry that contains the email address and score.
-        Dictionary<string, object> newScoreMap = new Dictionary<string, object>();
-        newScoreMap["question"] = _question;
-        newScoreMap["answer"] = _answer;
-        newScoreMap["datetime"] = DateTime.Now.ToString();
-        leaders.Add(newScoreMap);
+        Dictionary<string, object> newAnswerMap = new Dictionary<string, object>
+        {
+            ["question"] = _question,
+            ["answer"] = _answer,
+            ["user"] = _user,
+            ["datetime"] = DateTime.Now.ToString()
+        };
+        Answers.Add(newAnswerMap);
 
         // You must set the Value to indicate data at that location has changed.
-        mutableData.Value = leaders;
+        mutableData.Value = Answers;
         return TransactionResult.Success(mutableData);
     }
 
     public void AddQuestion(string question, string answer)
     {
-        _question = question;
-        _answer = answer;
+        if (canAsk == true)
+        {
+            _question = question;
+            _answer = answer;
+            canAsk = false;
+            StartCoroutine(QuestionCooldown());
+        }
         if (string.IsNullOrEmpty(question) || string.IsNullOrEmpty(answer))
         {
             Debug.Log("invalid question.");
-            logTextUI.text = "invalid question.";
+            TextUI.text = "invalid question.";
             return;
         }
         Debug.Log(question + " " + answer);
-        DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Leaders");
+        DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Answers");
 
         Debug.Log("Running Transaction...");
         // Use a transaction to ensure that we do not encounter issues with
         // simultaneous updates that otherwise might create more than MaxScores top scores.
-        reference.RunTransaction(AddScoreTransaction)
+        reference.RunTransaction(AddQuestion)
           .ContinueWithOnMainThread(task =>
           {
               if (task.Exception != null)
@@ -198,16 +209,8 @@ public class UIHandler : MonoBehaviour
           });
     }
 
-    //_email = TextField.text(email);
 
-    //public void UpdateScoreUI()
-    //{
-    //    scoreUI.text("Score:", 0));
-    //    int.TryParse(scoreUI.TextField(_score.ToString()), out _score);
-    //}
-
-
-    public void AuthenticateScore()
+    public void AuthenticateQuestion()
     {
         AddQuestion(questionInputField.text, MagicAnswer.AskAQuestion());
     }
@@ -216,45 +219,19 @@ public class UIHandler : MonoBehaviour
     {
         FirebaseDatabase.DefaultInstance.GoOffline();
         Debug.Log("You are Offline");
-        logTextUI.text = "You are Offline";
+        TextUI.text = "You are Offline";
     }
 
     public void GoOnlineButton()
     {
         FirebaseDatabase.DefaultInstance.GoOnline();
         Debug.Log("You are online");
-        logTextUI.text = "You are Online";
-
-        //void DisplayLeaders()
-        //foreach (string item in leaderBoard)
-
+        TextUI.text = "You are Online";
     }
 
-
-
-
-    //experimental
-
-    //public void writeNewUser(string email, string name, string pass, int score)
-    //{
-    //    Player user = new Player(emailRegisterField.text, usernameRegisterField.text, passwordRegisterField.text, PlayerPrefs.GetInt("HighScore"));
-    //    string json = JsonUtility.ToJson(user);
-    //    databaseReference.Child("users").Push().SetRawJsonValueAsync(json);
-    //}
-
-
-    //public void WriteNewScore(string userId, int score)
-    //{
-    //    // Create new entry at /user-scores/$userid/$scoreid and at
-    //    // /leaderboard/$scoreid simultaneously
-    //    string key = databaseReference.Child(userId)/*.Push()*/.Key;
-    //    LeaderboardEntry entry = new LeaderboardEntry(userId, score);
-    //    Dictionary<string, object> entryValues = entry.ToDictionary();
-
-    //    Dictionary<string, object> childUpdates = new Dictionary<string, object>();
-    //    //childUpdates["/scores/" + key] = entryValues;
-    //    childUpdates["/Highscore/" /*+ userId*/ + "/" + key] = entryValues;
-
-    //    databaseReference.UpdateChildrenAsync(childUpdates);
-    //}
+    IEnumerator QuestionCooldown()
+    {
+        yield return new WaitForSeconds(10f);
+        canAsk = true;
+    }
 }
