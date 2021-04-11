@@ -35,8 +35,9 @@ public class UIHandler : MonoBehaviour
 
     public TMP_InputField questionInputField;
 
-    public GameObject content_0;
-    public GameObject content_1;
+    public GameObject content_0_Ask;
+    public GameObject content_1_Answer;
+    public GameObject content_2_Leaderboard;
     
     public Transform leaderBoardArea;
     public GameObject rowPreFab;

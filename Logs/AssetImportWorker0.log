@@ -167,3 +167,168 @@ System memory in use after: 140.8 MB.
 Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 1648.
 Total: 2.418254 ms (FindLiveObjects: 0.175129 ms CreateObjectMapping: 0.051442 ms MarkObjects: 2.143021 ms  DeleteObjects: 0.046789 ms)
 
+========================================================================
+Received Import Request.
+  Time since last request: 990.126691 seconds.
+  path: Assets/MagicAnswersSFX/Recovery magic.wav
+  artifactKey: Guid(70bf53ff3fb6a4cbe8c787944dc722e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/Recovery magic.wav using Guid(70bf53ff3fb6a4cbe8c787944dc722e9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0fc891865e23d0a00c0888c27bf713e0') in 0.182233 seconds
+  Import took 0.185749 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.840145 seconds.
+  path: Assets/MagicAnswersSFX/Recovery magic.mp3
+  artifactKey: Guid(9200fc198d3bd42b595228b11629c560) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/Recovery magic.mp3 using Guid(9200fc198d3bd42b595228b11629c560) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '22911dccf7e6fe68cb140e5ce2ba340f') in 0.611272 seconds
+  Import took 0.614804 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 15.138385 seconds.
+  path: Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient/Magical Ambient.mp3
+  artifactKey: Guid(26441ab229fda42a8be0c1ce203e4ad8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient/Magical Ambient.mp3 using Guid(26441ab229fda42a8be0c1ce203e4ad8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3d9d978c3592c089523c0c4fd6475f61') in 0.009833 seconds
+  Import took 0.013285 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.163516 seconds.
+  path: Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient/Magical Ambient.wav
+  artifactKey: Guid(bf1929eefc60c45039b9fd17bc6ddbae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient/Magical Ambient.wav using Guid(bf1929eefc60c45039b9fd17bc6ddbae) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8f19acac80990d78394a97062e89fa8f') in 0.096954 seconds
+  Import took 0.099664 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 52.784274 seconds.
+  path: Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient
+  artifactKey: Guid(4ae204003b4dc4e56b25d2cbaf308146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient using Guid(4ae204003b4dc4e56b25d2cbaf308146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa86a35b319312593e76bf1d15279ffb') in 0.003004 seconds
+  Import took 0.006630 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000474 seconds.
+  path: Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient
+  artifactKey: Guid(4ae204003b4dc4e56b25d2cbaf308146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/audiojungle-2YiA3IJD-magical-ambient using Guid(4ae204003b4dc4e56b25d2cbaf308146) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa86a35b319312593e76bf1d15279ffb') in 0.001255 seconds
+  Import took 0.003991 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 64.168657 seconds.
+  path: Assets/MagicAnswersSFX/SFX_PreFabs/Magical_SFX.prefab
+  artifactKey: Guid(77d97537d3b1840aa804e3694e4a4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/SFX_PreFabs/Magical_SFX.prefab using Guid(77d97537d3b1840aa804e3694e4a4052) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b3b9092e64680af0f4c29034d27b6ce8') in 0.015894 seconds
+  Import took 0.018860 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 43.735399 seconds.
+  path: Assets/MagicAnswersSFX/SFX_PreFabs/Ambient_SFX.prefab
+  artifactKey: Guid(5b873e480b5324a56a67e0926c215a4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/SFX_PreFabs/Ambient_SFX.prefab using Guid(5b873e480b5324a56a67e0926c215a4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd7d4a864e9e25ca6207a569feb1c4daf') in 0.005951 seconds
+  Import took 0.009274 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003473 seconds.
+  path: Assets/MagicAnswersSFX/SFX_PreFabs/Ambient_SFX.prefab
+  artifactKey: Guid(5b873e480b5324a56a67e0926c215a4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/MagicAnswersSFX/SFX_PreFabs/Ambient_SFX.prefab using Guid(5b873e480b5324a56a67e0926c215a4f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd7d4a864e9e25ca6207a569feb1c4daf') in 0.005193 seconds
+  Import took 0.007787 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.009703 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 0.65 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.477 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.61 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1174 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 145.3 MB.
+System memory in use after: 145.4 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 1652.
+Total: 2.213113 ms (FindLiveObjects: 0.180968 ms CreateObjectMapping: 0.052553 ms MarkObjects: 1.937432 ms  DeleteObjects: 0.039948 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.005369 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 0.61 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.441 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.62 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1174 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 145.4 MB.
+System memory in use after: 145.5 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 1655.
+Total: 2.179071 ms (FindLiveObjects: 0.179743 ms CreateObjectMapping: 0.050238 ms MarkObjects: 1.915814 ms  DeleteObjects: 0.031755 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.005102 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 0.61 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.464 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.84 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1174 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 145.6 MB.
+System memory in use after: 145.7 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 1658.
+Total: 4.755160 ms (FindLiveObjects: 0.821131 ms CreateObjectMapping: 0.313600 ms MarkObjects: 3.584204 ms  DeleteObjects: 0.033898 ms)
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.009004 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for OSXStandalone target not found
+Refreshing native plugins compatible for Editor in 0.65 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Invoked RoslynAnalysisRunner static constructor.
+RoslynAnalysisRunner will not be running.
+RoslynAnalysisRunner has terminated.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.459 seconds
+Platform modules already initialized, skipping
+Refreshing native plugins compatible for Editor in 0.62 ms, found 4 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 1174 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 145.8 MB.
+System memory in use after: 145.9 MB.
+
+Unloading 35 unused Assets to reduce memory usage. Loaded Objects now: 1661.
+Total: 2.844437 ms (FindLiveObjects: 0.187305 ms CreateObjectMapping: 0.052072 ms MarkObjects: 2.562810 ms  DeleteObjects: 0.038691 ms)
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
