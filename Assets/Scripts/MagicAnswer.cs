@@ -11,7 +11,7 @@ public class MagicAnswer : MonoBehaviour
 
         Debug.Log("Welcome, what is your question?");
 
-        randomNumber = Random.Range(0, 5);
+        randomNumber = Random.Range(0, 49);
 
         return randomNumber switch
         {

@@ -7,12 +7,19 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
+
+// NOTES
+// Load the 25 latest questions asked. Cut off the rest
+// Question cooldown not working.
+// 
+
+
 public class UIHandler : MonoBehaviour
 {
 
     ArrayList questions = new ArrayList();
 
-    private const int _maxScores = 15;
+    private const int _maxAnswers = 25;
     private DateTime _dateTime;
     private string _question;
     private string _answer;
@@ -24,22 +31,24 @@ public class UIHandler : MonoBehaviour
     DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
     protected bool isFirebaseInitialized = false;
 
-    // adding in variables
     public TMP_Text TextUI;
 
     public TMP_InputField questionInputField;
 
+    public GameObject content_0;
+    public GameObject content_1;
+    
     public Transform leaderBoardArea;
     public GameObject rowPreFab;
 
-
+    
 
     // At start, check for the required dependencies to use Firebase, and if not, add them if possible.
     protected virtual void Start()
     {
         canAsk = true;
         questions.Clear();
-        questions.Add("Firebase Top " + _maxScores.ToString() + " Scores");
+        //questions.Add("Firebase Top " + _maxScores.ToString() + " Scores");
 
 
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
@@ -96,15 +105,13 @@ public class UIHandler : MonoBehaviour
                       }
                       else
                       {
-                          //      Debug.Log("Leaders entry : " +
-                          //childSnapshot.Child("question").Value.ToString() + " - " +
-                          //childSnapshot.Child("answer").Value.ToString());
                           questions.Insert(1, childSnapshot.Child("question").ToString() + "  " + childSnapshot.Child("answer").ToString());
 
                           GameObject tempGo = Instantiate(rowPreFab, leaderBoardArea);
                           TMP_Text[] texts = tempGo.GetComponentsInChildren<TMP_Text>();
                           texts[0].text = childSnapshot.Child("question").Value.ToString();
                           texts[1].text = childSnapshot.Child("answer").Value.ToString();
+                          texts[3].text = childSnapshot.Child("user").Value.ToString();
                           texts[2].text = childSnapshot.Child("datetime").Value.ToString();
                       }
                   }
@@ -189,7 +196,10 @@ public class UIHandler : MonoBehaviour
             TextUI.text = "invalid question.";
             return;
         }
-        Debug.Log(question + " " + answer);
+        Debug.Log("Your Question:" + question + " " + "Your Answer: " + answer);
+
+        TextUI.text = "Your Question:" + question + " " + "Your Answer: " + answer;
+
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Answers");
 
         Debug.Log("Running Transaction...");
@@ -205,6 +215,7 @@ public class UIHandler : MonoBehaviour
               else if (task.IsCompleted)
               {
                   Debug.Log("Transaction complete.");
+                  //content_1.SetActive.(false);
               }
           });
     }
