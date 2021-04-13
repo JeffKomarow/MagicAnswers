@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6469712530277932551}
   - component: {fileID: 1531504092677348450}
   m_Layer: 0
-  m_Name: SFX_Dream
+  m_Name: Magical_SFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49,7 +49,7 @@ AudioSource:
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 77
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

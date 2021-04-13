@@ -11,7 +11,9 @@ using UnityEngine;
 // NOTES
 // Load the 25 latest questions asked. Cut off the rest
 // Question cooldown not working.
-// 
+// How to properly end the animation so it isn's looping, but returns to the start once the start is called.
+// Play sound when transaction is complete
+// Close and open the right panels.
 
 
 public class UIHandler : MonoBehaviour
@@ -31,26 +33,32 @@ public class UIHandler : MonoBehaviour
     DependencyStatus dependencyStatus = DependencyStatus.UnavailableOther;
     protected bool isFirebaseInitialized = false;
 
-    public TMP_Text TextUI;
+    public TMP_Text textUI;
 
     public TMP_InputField questionInputField;
 
     public GameObject content_0_Ask;
     public GameObject content_1_Answer;
     public GameObject content_2_Leaderboard;
-    
+    public GameObject content_3_IntroText;
+
+    public TMP_Text questionUI;
+    public TMP_Text answerUI;
+
     public Transform leaderBoardArea;
     public GameObject rowPreFab;
 
-    
+    public GameObject magicalSFX;
+
 
     // At start, check for the required dependencies to use Firebase, and if not, add them if possible.
     protected virtual void Start()
     {
         canAsk = true;
         questions.Clear();
-        //questions.Add("Firebase Top " + _maxScores.ToString() + " Scores");
+        questions.Add("Firebase Top " + _maxAnswers.ToString() + " Scores");
 
+        content_0_Ask.SetActive(false);
 
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>
         {
@@ -77,7 +85,7 @@ public class UIHandler : MonoBehaviour
         Debug.Log("Firebase Initialized");
         _user = SystemInfo.deviceUniqueIdentifier.ToString();
         _user = _user.Substring(Math.Max(0, _user.Length - 6));
-        TextUI.text = "The underworld is ready for your question " + _user + ".";
+        textUI.text = "The underworld is ready for your question " + _user + ".";
     }
 
     protected void StartListener()
@@ -120,16 +128,6 @@ public class UIHandler : MonoBehaviour
           };
     }
 
-    // Exit if escape (or back, on mobile) is pressed.
-    protected virtual void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
-    }
-
-
     // A realtime database transaction receives MutableData which can be modified
     // and returns a TransactionResult which is either TransactionResult.Success(data) with
     // modified data or TransactionResult.Abort() which stops the transaction with no changes.
@@ -141,31 +139,7 @@ public class UIHandler : MonoBehaviour
         {
             Answers = new List<object>();
         }
-        //else if (mutableData.ChildrenCount >= _maxScores)
-        //{
-        //    // If the current list of scores is greater or equal to our maximum allowed number,
-        //    // we see if the new score should be added and remove the lowest existing score.
-        //    long minScore = long.MaxValue;
-        //    object minVal = null;
-        //    foreach (var child in leaders)
-        //    {
-        //        if (!(child is Dictionary<string, object>))
-        //            continue;
-        //        long childScore = (long)((Dictionary<string, object>)child)["score"];
-        //        if (childScore < minScore)
-        //        {
-        //            minScore = childScore;
-        //            minVal = child;
-        //        }
-        //    }
-        //    // If the new score is lower than the current minimum, we abort.
-        //    if (minScore > _score)
-        //    {
-        //        return TransactionResult.Abort();
-        //    }
-        //    // Otherwise, we remove the current lowest to be replaced with the new score.
-        //    leaders.Remove(minVal);
-        //}
+
 
         // Now we add the new score as a new entry that contains the email address and score.
         Dictionary<string, object> newAnswerMap = new Dictionary<string, object>
@@ -191,21 +165,28 @@ public class UIHandler : MonoBehaviour
             canAsk = false;
             StartCoroutine(QuestionCooldown());
         }
+
         if (string.IsNullOrEmpty(question) || string.IsNullOrEmpty(answer))
         {
             Debug.Log("invalid question.");
-            TextUI.text = "invalid question.";
+            textUI.text = "invalid question.";
             return;
         }
         Debug.Log("Your Question:" + question + " " + "Your Answer: " + answer);
+        content_1_Answer.SetActive(true);
+        content_0_Ask.SetActive(false);
+        content_3_IntroText.SetActive(false);
+        Instantiate(magicalSFX);
+        questionUI.text = question;
+        answerUI.text = answer;
 
-        TextUI.text = "Your Question:" + question + " " + "Your Answer: " + answer;
+
 
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Answers");
 
         Debug.Log("Running Transaction...");
-        // Use a transaction to ensure that we do not encounter issues with
-        // simultaneous updates that otherwise might create more than MaxScores top scores.
+
+        // Use a transaction to ensure that we do not encounter issues with simultaneous updates.
         reference.RunTransaction(AddQuestion)
           .ContinueWithOnMainThread(task =>
           {
@@ -227,23 +208,9 @@ public class UIHandler : MonoBehaviour
         AddQuestion(questionInputField.text, MagicAnswer.AskAQuestion());
     }
 
-    public void GoOfflineButton()
-    {
-        FirebaseDatabase.DefaultInstance.GoOffline();
-        Debug.Log("You are Offline");
-        TextUI.text = "You are Offline";
-    }
-
-    public void GoOnlineButton()
-    {
-        FirebaseDatabase.DefaultInstance.GoOnline();
-        Debug.Log("You are online");
-        TextUI.text = "You are Online";
-    }
-
     IEnumerator QuestionCooldown()
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(60f);
         canAsk = true;
     }
 }
