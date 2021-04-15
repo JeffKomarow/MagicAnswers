@@ -4,13 +4,11 @@ using Firebase.Extensions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 
 
-// NOTES
-// Load the 25 latest questions asked. Cut off the rest
-// Question cooldown not working. ShowAnswerCooldown // This is to let the audio clip play for 1 second before showing.
 
 public class UIHandler : MonoBehaviour
 {
@@ -31,15 +29,19 @@ public class UIHandler : MonoBehaviour
 
     public TMP_Text textUI;
 
+    public DateTime startCooldownTime;
+
     public TMP_InputField questionInputField;
 
     public GameObject content_0_Ask;
     public GameObject content_1_Answer;
     public GameObject content_2_Leaderboard;
     public GameObject content_3_IntroText;
+    public GameObject cooldownWindow;
 
     public TMP_Text questionUI;
     public TMP_Text answerUI;
+    public TMP_Text cooldownText;
 
     public Transform leaderBoardArea;
     public GameObject rowPreFab;
@@ -79,15 +81,15 @@ public class UIHandler : MonoBehaviour
         StartListener();
         isFirebaseInitialized = true;
         Debug.Log("Firebase Initialized");
-        _user = SystemInfo.deviceUniqueIdentifier.ToString();
-        _user = _user.Substring(Math.Max(0, _user.Length - 6));
+        _user = GenerateRandomAlphanumericString(6);
+        //_user = _user.Substring(Math.Max(0, _user.Length - 6));  
         textUI.text = "The underworld is ready for your question " + _user + ".";
     }
 
     protected void StartListener()
     {
         FirebaseDatabase.DefaultInstance
-          .GetReference("Questions").OrderByChild("date")
+          .GetReference("Answers").OrderByChild("unixdate").LimitToLast(25)
           .ValueChanged += (object sender2, ValueChangedEventArgs e2) =>
           {
               if (e2.DatabaseError != null)
@@ -101,6 +103,10 @@ public class UIHandler : MonoBehaviour
               questions.Add(title);
               if (e2.Snapshot != null && e2.Snapshot.ChildrenCount > 0)
               {
+                  foreach (Transform item in leaderBoardArea)
+                  {
+                      Destroy(item.gameObject);
+                  }
                   foreach (var childSnapshot in e2.Snapshot.Children)
                   {
                       if (childSnapshot.Child("question") == null || childSnapshot.Child("answer") == null)
@@ -113,11 +119,12 @@ public class UIHandler : MonoBehaviour
                           questions.Insert(1, childSnapshot.Child("question").ToString() + "  " + childSnapshot.Child("answer").ToString());
 
                           GameObject tempGo = Instantiate(rowPreFab, leaderBoardArea);
+                          tempGo.transform.SetAsFirstSibling();
                           TMP_Text[] texts = tempGo.GetComponentsInChildren<TMP_Text>();
                           texts[0].text = childSnapshot.Child("question").Value.ToString();
                           texts[1].text = childSnapshot.Child("answer").Value.ToString();
                           texts[3].text = childSnapshot.Child("user").Value.ToString();
-                          texts[2].text = childSnapshot.Child("datetime").Value.ToString();
+                          texts[2].text = childSnapshot.Child("datetime").Value.ToString().Split(' ')[0];
                       }
                   }
               }
@@ -143,7 +150,8 @@ public class UIHandler : MonoBehaviour
             ["question"] = _question,
             ["answer"] = _answer,
             ["user"] = _user,
-            ["datetime"] = DateTime.Now.ToString()
+            ["datetime"] = DateTime.Now.ToString(),
+            ["unixdate"] = DateTimeOffset.Now.ToUnixTimeSeconds()
         };
         Answers.Add(newAnswerMap);
 
@@ -154,6 +162,13 @@ public class UIHandler : MonoBehaviour
 
     public void AddQuestion(string question, string answer)
     {
+        if (string.IsNullOrEmpty(question) || string.IsNullOrEmpty(answer))
+        {
+            Debug.Log("invalid question.");
+            content_3_IntroText.SetActive(true);
+            textUI.text = "invalid question.";
+            return;
+        }
         if (canAsk == true)
         {
             _question = question;
@@ -161,21 +176,29 @@ public class UIHandler : MonoBehaviour
             canAsk = false;
             StartCoroutine(QuestionCooldown());
         }
-
-        if (string.IsNullOrEmpty(question) || string.IsNullOrEmpty(answer))
+        else
         {
-            Debug.Log("invalid question.");
-            textUI.text = "invalid question.";
+            cooldownWindow.SetActive(true);
+            TimeSpan timeLeft = DateTime.Now - startCooldownTime;
+            cooldownText.text = "You have " + (60-timeLeft.Seconds).ToString() + "Seconds before asking another question.";
+            StartCoroutine(CloseWindowCooldown());
             return;
         }
+
+        questionInputField.text = "";
+        cooldownWindow.SetActive(false);
+
         Debug.Log("Your Question:" + question + " " + "Your Answer: " + answer);
-        content_1_Answer.SetActive(true);
+        Instantiate(magicalSFX);
         content_0_Ask.SetActive(false);
         content_3_IntroText.SetActive(false);
-        Instantiate(magicalSFX);
+        content_1_Answer.SetActive(false);
+
+        StartCoroutine(ShowAnswerCooldown());
+
         questionUI.text = question;
         answerUI.text = answer;
-
+        
 
 
         DatabaseReference reference = FirebaseDatabase.DefaultInstance.GetReference("Answers");
@@ -208,11 +231,28 @@ public class UIHandler : MonoBehaviour
     IEnumerator ShowAnswerCooldown()
     {
         yield return new WaitForSeconds(1f);
-        
+        content_1_Answer.SetActive(true);
+
     }
     IEnumerator QuestionCooldown()
     {
+        startCooldownTime = DateTime.Now;
         yield return new WaitForSeconds(60f);
         canAsk = true;
+    }
+    IEnumerator CloseWindowCooldown()
+    {
+        yield return new WaitForSeconds(5f);
+        cooldownWindow.SetActive(false);
+    }
+
+    public static string GenerateRandomAlphanumericString(int length = 10)
+    {
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        var random = new System.Random();
+        var randomString = new string(Enumerable.Repeat(chars, length)
+                                                .Select(s => s[random.Next(s.Length)]).ToArray());
+        return randomString;
     }
 }

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "876786316101",
+    "firebase_url": "https://magicanswers-default-rtdb.firebaseio.com",
+    "project_id": "magicanswers",
+    "storage_bucket": "magicanswers.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876786316101:android:1ac32b72177f8dd8a0842c",
+        "android_client_info": {
+          "package_name": "com.JeffKomarow.MagicAnswers"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876786316101-l47tbpeclucdppiu2rsg7nsgu5rdqo5f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTMbyowD507J2A3xif4Ag8-cfJz5B5vGE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876786316101-l47tbpeclucdppiu2rsg7nsgu5rdqo5f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
