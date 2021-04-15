@@ -10,11 +10,7 @@ using UnityEngine;
 
 // NOTES
 // Load the 25 latest questions asked. Cut off the rest
-// Question cooldown not working.
-// How to properly end the animation so it isn's looping, but returns to the start once the start is called.
-// Play sound when transaction is complete
-// Close and open the right panels.
-
+// Question cooldown not working. ShowAnswerCooldown // This is to let the audio clip play for 1 second before showing.
 
 public class UIHandler : MonoBehaviour
 {
@@ -208,6 +204,12 @@ public class UIHandler : MonoBehaviour
         AddQuestion(questionInputField.text, MagicAnswer.AskAQuestion());
     }
 
+
+    IEnumerator ShowAnswerCooldown()
+    {
+        yield return new WaitForSeconds(1f);
+        
+    }
     IEnumerator QuestionCooldown()
     {
         yield return new WaitForSeconds(60f);
